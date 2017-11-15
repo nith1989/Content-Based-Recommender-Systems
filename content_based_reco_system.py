@@ -1,15 +1,11 @@
 # coding: utf-8
-
-# # Assignment 3:  Recommendation systems
 #
-# Here we'll implement a content-based recommendation algorithm.
+# Here I will implement a content-based recommendation algorithm.
 # It will use the list of genres for a movie as the content.
-# The data come from the MovieLens project: http://grouplens.org/datasets/movielens/
-# Note that I have not provided many doctests for this one. I strongly
-# recommend that you write your own for each function to ensure your
-# implementation is correct.
+# The data comes from the MovieLens project: http://grouplens.org/datasets/movielens/
+# Note that I have not provided many doctests for this one.
 
-# Please only use these imports.
+# Required imports
 from collections import Counter, defaultdict
 import math
 import numpy as np
@@ -21,7 +17,7 @@ import urllib.request
 import zipfile
 
 def download_data():
-    """ DONE. Download and unzip data.
+    """  Download and unzip data.
     """
     url = 'https://www.dropbox.com/s/h9ubx22ftdkyvd5/ml-latest-small.zip?dl=1'
     urllib.request.urlretrieve(url, 'ml-latest-small.zip')
@@ -31,7 +27,7 @@ def download_data():
 
 
 def tokenize_string(my_string):
-    """ DONE. You should use this in your tokenize function.
+    """  Will use this in tokenize function.
     """
     return re.findall('[\w\-]+', my_string.lower())
 
@@ -42,7 +38,7 @@ def tokenize(movies):
     This will contain a list of strings, one per token, extracted
     from the 'genre' field of each movie. Use the tokenize_string method above.
 
-    Note: you may modify the movies parameter directly; no need to make
+    Note: Modifying the movies parameter directly; not making
     a new copy.
     Params:
       movies...The movies DataFrame
@@ -75,8 +71,8 @@ def featurize(movies):
     """
     Append a new column to the movies DataFrame with header 'features'.
     Each row will contain a csr_matrix of shape (1, num_features). Each
-    entry in this matrix will contain the tf-idf value of the term, as
-    defined in class:
+    entry in this matrix will contain the tf-idf value of the term,
+    defined as:
     tfidf(i, d) := tf(i, d) / max_k tf(k, d) * log10(N/df(i))
     where:
     i is a term
@@ -91,7 +87,7 @@ def featurize(movies):
     Returns:
       A tuple containing:
       - The movies DataFrame, which has been modified to include a column named 'features'.
-      - The vocab, a dict from term to int. Make sure the vocab is sorted alphabetically as in a2 (e.g., {'aardvark': 0, 'boy': 1, ...})
+      - The vocab, a dict from term to int. Vocab is sorted alphabetically as in a2 (e.g., {'aardvark': 0, 'boy': 1, ...})
     """
     # Get the list of genres for all movies
     nmov = movies.movieId.nunique()
@@ -167,7 +163,7 @@ def featurize(movies):
     return movies,vocab_final
 
 def train_test_split(ratings):
-    """DONE.
+    """
     Returns a random split of the ratings matrix into a training and testing set.
     """
     test = set(range(len(ratings))[::1000])
@@ -320,7 +316,7 @@ def make_predictions(movies, ratings_train, ratings_test):
 
 
 def mean_absolute_error(predictions, ratings_test):
-    """DONE.
+    """
     Return the mean absolute error of the predictions.
     """
     return np.abs(predictions - np.array(ratings_test.rating)).mean()
